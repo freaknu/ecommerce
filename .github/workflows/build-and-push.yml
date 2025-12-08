@@ -72,8 +72,15 @@ jobs:
           )
 
           for folder in "${!services[@]}"; do
-            IMAGE="${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/${services[$folder]}:${GITHUB_SHA}"
-            echo "🚀 Building: $IMAGE"
-            docker build -t "$IMAGE" "$folder"
-            docker push "$IMAGE"
+            IMAGE_SHA="$REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/${services[$folder]}:${{ github.sha }}"
+            IMAGE_LATEST="$REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/${services[$folder]}:latest"
+
+            echo "🚀 Building $folder -> ${services[$folder]}"
+            docker build -t "$IMAGE_SHA" -t "$IMAGE_LATEST" "$folder"
+
+            echo "📤 Pushing $IMAGE_SHA"
+            docker push "$IMAGE_SHA"
+
+            echo "📤 Pushing $IMAGE_LATEST"
+            docker push "$IMAGE_LATEST"
           done
