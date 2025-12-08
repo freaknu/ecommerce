@@ -15,10 +15,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout project
         uses: actions/checkout@v4
 
-      - name: Setup JDK
+      - name: Set up JDK
         uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -29,10 +29,13 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-      - name: Configure Docker for Artifact Registry
+      - name: Set project
+        run: gcloud config set project $PROJECT_ID
+
+      - name: Enable Docker auth for Artifact Registry
         run: gcloud auth configure-docker $REGION-docker.pkg.dev -q
 
-      - name: Build JARs
+      - name: Build JAR files
         run: |
           mvn -B -f AuthService/pom.xml clean package -DskipTests
           mvn -B -f eurekaserver/pom.xml clean package -DskipTests
@@ -43,7 +46,7 @@ jobs:
           mvn -B -f product_service/pom.xml clean package -DskipTests
           mvn -B -f uploadservice/pom.xml clean package -DskipTests
 
-      - name: Copy built JARs
+      - name: Copy JARs for Docker build
         run: |
           cp AuthService/target/*.jar AuthService/
           cp eurekaserver/target/*.jar eurekaserver/
@@ -67,9 +70,10 @@ jobs:
             ["product_service"]="product-service"
             ["uploadservice"]="upload-service"
           )
-          
+
           for folder in "${!services[@]}"; do
-            IMAGE="$REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/${services[$folder]}:${{ github.sha }}"
+            IMAGE="${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/${services[$folder]}:${GITHUB_SHA}"
+            echo "🚀 Building: $IMAGE"
             docker build -t "$IMAGE" "$folder"
             docker push "$IMAGE"
           done
