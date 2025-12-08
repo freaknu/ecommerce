@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-service
+  template:
+    metadata:
+      labels:
+        app: auth-service
+    spec:
+      containers:
+        - name: auth-service
+          image: asia-south1-docker.pkg.dev/ecommercebackend-480616/ecommerce-repo/auth-service:latest
+          ports:
+            - containerPort: 8081
+          envFrom:
+            - secretRef:
+                name: ecommerce-secrets
+            - configMapRef:
+                name: ecommerce-config
+          env:
+            - name: SPRING_APPLICATION_NAME
+              value: "auth-service"
+            - name: SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: ecommerce-config
+                  key: AUTH_PORT
+            - name: DB_URL
+              value: "jdbc:mysql://mysql:3306/auth_service?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true"
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              valueFrom:
+                configMapKeyRef:
+                  name: ecommerce-config
+                  key: KAFKA_BOOTSTRAP_SERVERS
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+spec:
+  selector:
+    app: auth-service
+  ports:
+    - port: 8081
+      targetPort: 8081
+  type: ClusterIP

@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: upload-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: upload-service
+  template:
+    metadata:
+      labels:
+        app: upload-service
+    spec:
+      containers:
+        - name: upload-service
+          image: asia-south1-docker.pkg.dev/ecommercebackend-480616/ecommerce-repo/upload-service:latest
+          ports:
+            - containerPort: 8087
+          envFrom:
+            - secretRef:
+                name: ecommerce-secrets
+            - configMapRef:
+                name: ecommerce-config
+          env:
+            - name: SPRING_APPLICATION_NAME
+              value: "upload-service"
+            - name: SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: ecommerce-config
+                  key: UPLOAD_PORT
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: upload-service
+spec:
+  selector:
+    app: upload-service
+  ports:
+    - port: 8087
+      targetPort: 8087
+  type: ClusterIP

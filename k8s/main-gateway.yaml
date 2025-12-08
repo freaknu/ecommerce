@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: main-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: main-gateway
+  template:
+    metadata:
+      labels:
+        app: main-gateway
+    spec:
+      containers:
+        - name: main-gateway
+          image: asia-south1-docker.pkg.dev/ecommercebackend-480616/ecommerce-repo/main-gateway:latest
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - secretRef:
+                name: ecommerce-secrets
+            - configMapRef:
+                name: ecommerce-config
+          env:
+            - name: SPRING_APPLICATION_NAME
+              value: "main-gateway"
+            - name: SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: ecommerce-config
+                  key: GATEWAY_PORT
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: main-gateway
+spec:
+  selector:
+    app: main-gateway
+  ports:
+    - port: 80
+      targetPort: 8080
+  type: LoadBalancer

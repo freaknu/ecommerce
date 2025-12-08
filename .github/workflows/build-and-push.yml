@@ -3,7 +3,7 @@ name: Build and Push Docker Images
 on:
   push:
     branches: [ "main" ]
-  workflow_dispatch: {}
+  workflow_dispatch:
 
 env:
   PROJECT_ID: ecommercebackend-480616
@@ -43,7 +43,19 @@ jobs:
           mvn -B -f product_service/pom.xml clean package -DskipTests
           mvn -B -f uploadservice/pom.xml clean package -DskipTests
 
+      - name: Copy built JARs
+        run: |
+          cp AuthService/target/*.jar AuthService/
+          cp eurekaserver/target/*.jar eurekaserver/
+          cp inventory_service/target/*.jar inventory_service/
+          cp maingateway/target/*.jar maingateway/
+          cp notification_service/target/*.jar notification_service/
+          cp order_service/target/*.jar order_service/
+          cp product_service/target/*.jar product_service/
+          cp uploadservice/target/*.jar uploadservice/
+
       - name: Build and Push Docker Images
+        shell: bash
         run: |
           declare -A services=(
             ["AuthService"]="auth-service"
@@ -58,6 +70,6 @@ jobs:
           
           for folder in "${!services[@]}"; do
             IMAGE="$REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/${services[$folder]}:${{ github.sha }}"
-            docker build -t "$IMAGE" "./$folder"
+            docker build -t "$IMAGE" "$folder"
             docker push "$IMAGE"
           done
