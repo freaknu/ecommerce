@@ -16,7 +16,7 @@ public class WebCorsConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         // YOUR FRONTEND ORIGIN (Vite)
-        config.setAllowedOrigins(List.of("http://localhost:5173","http://136.111.69.14"));
+        config.setAllowedOrigins(List.of("http://localhost:5173","http://136.111.69.14","https://ecommerce-web-puce-sigma.vercel.app","http://34.58.229.119:5173"));
 
         // HTTP methods allowed from frontend
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));

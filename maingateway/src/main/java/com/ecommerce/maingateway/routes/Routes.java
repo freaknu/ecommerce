@@ -1,5 +1,6 @@
 package com.ecommerce.maingateway.routes;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.cloud.gateway.server.mvc.filter.BeforeFilterFunctions;
 import org.springframework.cloud.gateway.server.mvc.filter.CircuitBreakerFilterFunctions;
 import org.springframework.cloud.gateway.server.mvc.handler.HandlerFunctions;
@@ -8,11 +9,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.function.HandlerFunction;
 import org.springframework.web.servlet.function.RouterFunction;
+import org.springframework.web.servlet.function.ServerRequest;
 import org.springframework.web.servlet.function.ServerResponse;
 
 import java.net.URI;
+import java.util.function.Function;
 
 import static org.springframework.cloud.gateway.server.mvc.filter.FilterFunctions.setPath;
 import static org.springframework.cloud.gateway.server.mvc.handler.GatewayRouterFunctions.route;
@@ -21,6 +26,26 @@ import static org.springframework.web.servlet.function.RequestPredicates.method;
 import static org.springframework.cloud.gateway.server.mvc.filter.BeforeFilterFunctions.removeRequestHeader;
 @Configuration
 public class Routes {
+
+    private Function<ServerRequest, ServerRequest> addSecurityHeader() {
+        return serverRequest -> {
+            ServletRequestAttributes attrs =
+                    (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+
+            if (attrs != null) {
+                HttpServletRequest servletRequest = attrs.getRequest();
+
+                Object roleAttr = servletRequest.getAttribute("X-User-Roles");
+                if (roleAttr != null) {
+                    return ServerRequest.from(serverRequest)
+                            .headers(headers -> headers.add("X-User-Roles", roleAttr.toString()))
+                            .build();
+                }
+            }
+
+            return serverRequest;
+        };
+    }
 
 
     @Bean
@@ -50,6 +75,7 @@ public class Routes {
                 .route(req -> path("/api/product/**").test(req)
                                 || req.method().equals(HttpMethod.OPTIONS),
                         HandlerFunctions.http("lb://product-service"))
+                .before(addSecurityHeader())
                 .filter(CircuitBreakerFilterFunctions.circuitBreaker(
                         "productService", URI.create("forward:/fallbackRoute")
                 ))
@@ -74,6 +100,7 @@ public class Routes {
                 .route(req -> path("/api/order/**").test(req)
                                 || req.method().equals(HttpMethod.OPTIONS),
                         HandlerFunctions.http("lb://order-service"))
+                .before(addSecurityHeader())
                 .filter(CircuitBreakerFilterFunctions.circuitBreaker(
                         "orderService", URI.create("forward:/fallbackRoute")
                 ))

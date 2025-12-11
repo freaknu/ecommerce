@@ -8,7 +8,9 @@
     <file url="file://$PROJECT_DIR$/maingateway/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/notification_service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/order_service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/producreview/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/product_service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/productreview/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/uploadservice/src/main/java" charset="UTF-8" />
   </component>
 </project>

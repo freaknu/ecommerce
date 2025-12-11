@@ -26,7 +26,7 @@ import java.util.Map;
 @RequestMapping("/api/auth")
 public class AuthController {
     private final AuthService authService;
-//    private final OauthService oauthService;
+    private final OauthService oauthService;
 
     @PostMapping("/create-user")
     public ResponseEntity<AuthResponse> createAccount(@RequestBody SignupRequest data) throws Exception {
@@ -66,15 +66,15 @@ public class AuthController {
             return ResponseEntity.internalServerError().build();
         }
     }
-//    @GetMapping("/oauth2/success")
-//    public ResponseEntity<AuthResponse> googleSuccess(@AuthenticationPrincipal OAuth2User user) {
-//        if (user == null) return ResponseEntity.badRequest().build();
-//
-//        String email = user.getAttribute("email");
-//        String name = user.getAttribute("name");
-//
-//        AuthResponse response = oauthService.generateToken(name, email);
-//
-//        return ResponseEntity.ok(response);
-//    }
+    @GetMapping("/oauth2/success")
+    public ResponseEntity<AuthResponse> googleSuccess(@AuthenticationPrincipal OAuth2User user) {
+        if (user == null) return ResponseEntity.badRequest().build();
+
+        String email = user.getAttribute("email");
+        String name = user.getAttribute("name");
+
+        AuthResponse response = oauthService.generateToken(name, email);
+
+        return ResponseEntity.ok(response);
+    }
 }

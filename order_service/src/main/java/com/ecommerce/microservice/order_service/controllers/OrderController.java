@@ -1,5 +1,6 @@
 package com.ecommerce.microservice.order_service.controllers;
 
+import com.ecommerce.microservice.order_service.aop.RoleAnnotation;
 import com.ecommerce.microservice.order_service.clientsDto.InventoryClientRequestDto;
 import com.ecommerce.microservice.order_service.dto.OrderDto;
 import com.ecommerce.microservice.order_service.dto.OrderStatusDto;
@@ -33,6 +34,7 @@ public class OrderController {
     }
 
 
+    @RoleAnnotation("ROLE_USER")
     @PostMapping("/placeOrder/{userId}/{addressId}")
     public ResponseEntity<OrderDto> placeOrderByUser(@RequestBody InventoryClientRequestDto data, @PathVariable Long userId,
                                                      @PathVariable Long addressId) {
@@ -46,6 +48,7 @@ public class OrderController {
         }
     }
 
+    @RoleAnnotation("ROLE_USER")
     @PostMapping("/cancelOrder/{orderId}")
     public ResponseEntity<OrderDto> cancelOrderByOrderId(@PathVariable Long orderId) {
         try {

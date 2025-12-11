@@ -18,10 +18,9 @@
         </processorPath>
         <module name="inventory_service" />
         <module name="eurekaserver" />
+        <module name="maingateway" />
         <module name="order_service" />
         <module name="notification_service" />
-        <module name="AuthService" />
-        <module name="maingateway" />
       </profile>
       <profile name="Annotation profile for uploadservice" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -32,10 +31,13 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
         </processorPath>
         <module name="uploadservice" />
+        <module name="AuthService" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="main_gateway" target="21" />
+      <module name="producreview" target="21" />
+      <module name="productreview" target="21" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
@@ -47,7 +49,9 @@
       <module name="maingateway" options="-parameters" />
       <module name="notification_service" options="-parameters" />
       <module name="order_service" options="-parameters" />
+      <module name="producreview" options="-parameters" />
       <module name="product_service" options="-parameters" />
+      <module name="productreview" options="-parameters" />
       <module name="uploadservice" options="-parameters" />
     </option>
   </component>

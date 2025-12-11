@@ -32,13 +32,13 @@ public class AppUser {
 
     @OneToOne(mappedBy = "appUser",
             cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY)
+            orphanRemoval = true
+    )
     private RefreshToken refreshToken;
 
     private String profileUrl;
 
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     @CollectionTable(
             name = "user_roles",

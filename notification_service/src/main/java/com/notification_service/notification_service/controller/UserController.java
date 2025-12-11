@@ -12,7 +12,9 @@ import org.springframework.http.ResponseEntity;
 @RequestMapping("/api/notification")
 @CrossOrigin(origins = {
         "http://136.111.69.14",
-        "http://localhost:5173"
+        "http://localhost:5173",
+        "https://ecommerce-web-puce-sigma.vercel.app",
+        "http://34.58.229.119:5173"
 })
 
 @RequiredArgsConstructor

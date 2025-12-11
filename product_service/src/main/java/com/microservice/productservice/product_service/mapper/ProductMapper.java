@@ -16,9 +16,10 @@ public class ProductMapper {
         product.setUserId(data.getUserId());
         product.setSizes(data.getSize());
         product.setCategory(category);
+        product.setCreatedBy(data.getCreatedBy());
         return product;
     }
-    // ProductMapper.java
+
     public static ProductCreateResponseDto toProductCreateResponseDto(ProductModel product) {
         ProductCreateResponseDto dto = new ProductCreateResponseDto();
         dto.setId(product.getId());
@@ -26,8 +27,7 @@ public class ProductMapper {
         dto.setProductDescription(product.getProductDescription());
         dto.setProductPrice(product.getProductPrice());
         dto.setProductsImages(product.getProductsImages());
-
-        // FIXED: Null-safe category name
+        dto.setCategoryId(product.getId());
         dto.setCategoryName(product.getCategory() != null ? product.getCategory().getCategoryName() : null);
 
         return dto;

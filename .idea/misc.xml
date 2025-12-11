@@ -13,11 +13,13 @@
         <option value="$PROJECT_DIR$/notification_service/pom.xml" />
         <option value="$PROJECT_DIR$/eurekaserver/pom.xml" />
         <option value="$PROJECT_DIR$/uploadservice/pom.xml" />
+        <option value="$PROJECT_DIR$/producreview/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/main_gateway/pom.xml" />
+        <option value="$PROJECT_DIR$/producreview/pom.xml" />
       </set>
     </option>
   </component>

@@ -19,4 +19,5 @@ public class ProductCreateResponseDto implements Serializable {
     private int productPrice;
     private List<String> productsImages = new ArrayList<>();
     private String categoryName;
+    private Long categoryId;
 }

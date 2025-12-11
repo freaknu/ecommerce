@@ -19,6 +19,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     private final JwtFilter jwtFilter;
 //    private final CorsConfig config;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
@@ -34,6 +36,15 @@ public class SecurityConfig {
 //                .oauth2Login(oauth->oauth
 //                        .loginPage("/oauth2/authorization/google")
 //                        .defaultSuccessUrl("/oauth2/success",true))
+                .oauth2Login(oauth->oauth.authorizationEndpoint(e->e.baseUri("/oauth2/authorization"))
+                        .successHandler(oAuth2LoginSuccessHandler))
+
+                .exceptionHandling(ex->ex
+                        .authenticationEntryPoint((req,res,ex2)->{
+                            res.setStatus(401);
+                            res.setContentType("application/json");
+                            res.getWriter().write("{\"error\":\"Unauthorized\"}");
+                        }))
                 .build();
     }
 

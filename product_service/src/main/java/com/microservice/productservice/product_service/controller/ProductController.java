@@ -1,5 +1,6 @@
 package com.microservice.productservice.product_service.controller;
 
+import com.microservice.productservice.product_service.aop.RoleAnnotation;
 import com.microservice.productservice.product_service.dto.product.ProductCreateResponseDto;
 import com.microservice.productservice.product_service.dto.product.ProductCreaterequestDto;
 import com.microservice.productservice.product_service.service.ProductService;
@@ -35,6 +36,7 @@ public class ProductController {
         }
     }
 
+    @RoleAnnotation("ROLE_ADMIN")
     @PostMapping("/createProduct/{quantity}")
     public ResponseEntity<ProductCreateResponseDto> createProduct(@RequestBody ProductCreaterequestDto data,@PathVariable int quantity) {
         try {
@@ -45,7 +47,6 @@ public class ProductController {
             throw e;
         }
     }
-
     @GetMapping("/getProductById/{id}")
     public ResponseEntity<ProductCreateResponseDto> getProductById(@PathVariable Long id) {
         try {
@@ -57,6 +58,7 @@ public class ProductController {
         }
     }
 
+    @RoleAnnotation("ROLE_ADMIN")
     @PostMapping("/updateProduct/{id}")
     public ResponseEntity<ProductCreateResponseDto>  updateProduct(@PathVariable Long id, @RequestBody ProductCreaterequestDto data) {
         try {
@@ -68,6 +70,7 @@ public class ProductController {
         }
     }
 
+    @RoleAnnotation("ROLE_ADMIN")
     @DeleteMapping("/deleteProduct/{id}")
     public ResponseEntity<Boolean>  deleteProduct(@PathVariable Long id) {
         try {

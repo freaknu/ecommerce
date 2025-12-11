@@ -57,12 +57,6 @@ springdoc:
     path: /v3/api-docs
 
 
-#jwt_secret: s3cr3tB45364v3ryL0ngR4nd0mlyG3n3r4t3dStr1ng==
-#jwt_expiration: 30000000
-#refresh_token_expiration: 4320000000
-#otp_token_expiration: 600000
-
-
 jwt_secret: ${JWT_SECRET}
 jwt_expiration: ${JWT_EXPIRATION}
 jwt_refresh-token-expiration: ${REFRESH_TOKEN_EXPIRATION}

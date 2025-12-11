@@ -1,6 +1,7 @@
 package com.microservice.productservice.product_service.service;
 
 import com.microservice.productservice.product_service.common.ResourceNotFoundException;
+import com.microservice.productservice.product_service.document.service.ProductDocumentService;
 import com.microservice.productservice.product_service.dto.product.ProductCreateResponseDto;
 import com.microservice.productservice.product_service.dto.product.ProductCreaterequestDto;
 import com.microservice.productservice.product_service.mapper.ProductMapper;
@@ -26,7 +27,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final InventoryClientService inventoryClientService;
-
+    private final ProductDocumentService productDocumentService;
     private static final Logger log = LoggerFactory.getLogger(ProductService.class);
 
     public ProductCreateResponseDto createProduct(ProductCreaterequestDto data, int quantity) {
@@ -36,7 +37,7 @@ public class ProductService {
 
         ProductModel product = ProductMapper.toProductModel(data, category);
         ProductModel savedProduct = productRepository.save(product);
-
+        productDocumentService.indexProduct(savedProduct);
         inventoryClientService.createOrUpdateInventory(savedProduct, data.getCategoryId(), quantity);
 
         return ProductMapper.toProductCreateResponseDto(savedProduct);
@@ -58,6 +59,7 @@ public class ProductService {
     }
 
     public void deleteProduct(Long id) {
+        productDocumentService.deleteProductFromIndex(id);
         productRepository.deleteById(id);
     }
 

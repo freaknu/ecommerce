@@ -18,5 +18,6 @@ public class ProductCreaterequestDto {
     private List<String> productsImages = new ArrayList<>();
     private Long categoryId;
     private List<String> size = new ArrayList<>();
+    private String createdBy;
 }
 

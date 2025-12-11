@@ -45,7 +45,7 @@ public class JwtFilter extends OncePerRequestFilter {
                         .collect(Collectors.toList());
 
                 UserDetails userDetails = User.withUsername(username)
-                        .password("") // not needed
+                        .password("")
                         .authorities(authorities)
                         .build();
 
