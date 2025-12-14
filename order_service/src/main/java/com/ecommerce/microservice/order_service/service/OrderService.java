@@ -31,7 +31,7 @@ public class OrderService {
     private final KafkaEventService kafkaEventService;
 
     @Transactional
-    public OrderDto placeOrder(InventoryClientRequestDto dto, Long addressId, Long userId) throws Exception {
+    public OrderDto placeOrder(InventoryClientRequestDto dto, Long addressId, Long userId,Double discount) throws Exception {
 
         // Fetch address for order
         Address address = addressService.adddressByAddressId(addressId);
@@ -55,6 +55,7 @@ public class OrderService {
         order.setUserId(userId);
         order.setProductId(dto.getProductId());
         order.setDeliveryDate(null);
+        order.setDiscountApplied(discount);
 
         Order savedOrder = orderRepository.save(order);
 

@@ -35,11 +35,11 @@ public class OrderController {
 
 
     @RoleAnnotation("ROLE_USER")
-    @PostMapping("/placeOrder/{userId}/{addressId}")
+    @PostMapping("/placeOrder/{userId}/{addressId}/{amount}")
     public ResponseEntity<OrderDto> placeOrderByUser(@RequestBody InventoryClientRequestDto data, @PathVariable Long userId,
-                                                     @PathVariable Long addressId) {
+                                                     @PathVariable Long addressId,@PathVariable Double discount) {
         try {
-            var res = orderService.placeOrder(data,addressId,userId);
+            var res = orderService.placeOrder(data,addressId,userId,discount);
             return ResponseEntity.ok().body(res);
         }
         catch (Exception e) {

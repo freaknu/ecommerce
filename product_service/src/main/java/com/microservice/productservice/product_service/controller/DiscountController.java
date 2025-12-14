@@ -98,6 +98,4 @@ public class DiscountController {
             return ResponseEntity.internalServerError().build();
         }
     }
-
-
 }

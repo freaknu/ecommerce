@@ -29,8 +29,7 @@ public class Order {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "address_id")
     private Address address;
-
+    private Double discountApplied;
     private LocalDateTime orderAt;
-
     private LocalDateTime deliveryDate;
 }

@@ -9,6 +9,7 @@ public class OrderMappers {
         Order order = new Order();
         order.setUserId(orderDto.getUserId());
         order.setOrderAt(orderDto.getOrderAt());
+        order.setDiscountApplied(orderDto.getDiscount());
         return order;
     }
 
@@ -22,6 +23,7 @@ public class OrderMappers {
         res.setOrderDate(order.getOrderAt());
         res.setProductId(order.getProductId());
         res.setAddress(order.getAddress());
+        res.setDiscount(order.getDiscountApplied());
         return res;
     }
 }

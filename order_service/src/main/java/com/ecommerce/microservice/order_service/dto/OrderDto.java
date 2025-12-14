@@ -20,5 +20,6 @@ public class OrderDto {
     private LocalDateTime orderDate;
     private LocalDateTime orderAt;
     private LocalDateTime deliveryDate;
+    private Double discount;
     private OrderStatus orderStatus;
 }

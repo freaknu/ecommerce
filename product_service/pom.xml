@@ -16,7 +16,6 @@
     <artifactId>product_service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>product_service</name>
-
     <properties>
         <java.version>21</java.version>
         <!-- REQUIRED for Spring Cloud -->
