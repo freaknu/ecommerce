@@ -1,2 +1,8 @@
 k8s/secrets.yaml
 docker-compose.yml
+#application.yml
+# Spring Boot config files
+application.yml
+application.properties
+**/application.yml
+**/application.properties
