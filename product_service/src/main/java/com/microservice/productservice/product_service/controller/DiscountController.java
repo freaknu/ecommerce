@@ -1,6 +1,7 @@
 package com.microservice.productservice.product_service.controller;
 
 import com.microservice.productservice.product_service.aop.RoleAnnotation;
+import com.microservice.productservice.product_service.common.ApiResponseFormat;
 import com.microservice.productservice.product_service.config.ContextFactory;
 import com.microservice.productservice.product_service.dto.discount.DiscountDto;
 import com.microservice.productservice.product_service.dto.product.ProductCreateResponseDto;
@@ -9,93 +10,125 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/product")
-@Tag(name = "Discount Controller",description = "Discount Controller for Ecommerce")
+@Tag(name = "Discount Controller", description = "Discount Controller for Ecommerce")
 public class DiscountController {
+
     private final DiscountService discountService;
-    private final Logger log = LoggerFactory.getLogger(DiscountController.class);
     private final ContextFactory contexts;
+    private final Logger log = LoggerFactory.getLogger(DiscountController.class);
 
     @GetMapping("/getAllDiscounts")
-    public ResponseEntity<List<DiscountDto>> getAllDiscounts() {
-        try {
-            var res = discountService.getAll();
-            contexts.getRoles();
-            return ResponseEntity.ok().body(res);
-        }
-        catch (Exception e) {
-            log.error("Problem while getting the all discounts : {}",e.toString());
-            return ResponseEntity.internalServerError().build();
-        }
+    public ResponseEntity<ApiResponseFormat<List<DiscountDto>>> getAllDiscounts() {
+        List<DiscountDto> res = discountService.getAll();
+        contexts.getRoles();
+
+        return ResponseEntity.ok(
+                new ApiResponseFormat<>(
+                        res,
+                        "All discounts fetched successfully",
+                        true,
+                        HttpStatus.OK.value(),
+                        LocalDateTime.now()
+                )
+        );
     }
 
     @PostMapping("/createDiscount")
-    public ResponseEntity<DiscountDto> createDiscount(@RequestBody DiscountDto discountDto) {
-        try {
-            var res = discountService.createDiscount(discountDto);
-            return ResponseEntity.ok().body(res);
-        }
-        catch (Exception e) {
-            log.error("Problem while creating the discount : {}",e.toString());
-            return ResponseEntity.internalServerError().build();
-        }
+    public ResponseEntity<ApiResponseFormat<DiscountDto>> createDiscount(
+            @RequestBody DiscountDto discountDto
+    ) {
+        DiscountDto res = discountService.createDiscount(discountDto);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                new ApiResponseFormat<>(
+                        res,
+                        "Discount created successfully",
+                        true,
+                        HttpStatus.CREATED.value(),
+                        LocalDateTime.now()
+                )
+        );
     }
 
     @RoleAnnotation("ROLE_ADMIN")
     @PostMapping("/updateDiscount/{id}")
-    public ResponseEntity<DiscountDto> updateDiscount(@RequestBody DiscountDto discountDto,@PathVariable UUID id) {
-        try {
-            var res = discountService.updateDiscount(discountDto,id);
-            return ResponseEntity.ok().body(res);
-        }
-        catch (Exception e) {
-            log.error("Problem while updating the discount : {}",e.toString());
-            return ResponseEntity.internalServerError().build();
-        }
+    public ResponseEntity<ApiResponseFormat<DiscountDto>> updateDiscount(
+            @RequestBody DiscountDto discountDto,
+            @PathVariable UUID id
+    ) {
+        DiscountDto res = discountService.updateDiscount(discountDto, id);
+
+        return ResponseEntity.ok(
+                new ApiResponseFormat<>(
+                        res,
+                        "Discount updated successfully",
+                        true,
+                        HttpStatus.OK.value(),
+                        LocalDateTime.now()
+                )
+        );
     }
 
     @RoleAnnotation("ROLE_ADMIN")
     @DeleteMapping("/deleteDiscount/{id}")
-    public ResponseEntity<Boolean> deleteDiscount(@PathVariable UUID id) {
-        try {
-            var res = discountService.deleteDiscount(id);
-            return ResponseEntity.ok().body(res);
-        }
-        catch(Exception e) {
-            log.error("Problem while deleting the discount : {}",e.toString());
-            return ResponseEntity.internalServerError().build();
-        }
+    public ResponseEntity<ApiResponseFormat<Boolean>> deleteDiscount(
+            @PathVariable UUID id
+    ) throws Exception {
+        Boolean res = discountService.deleteDiscount(id);
+
+        return ResponseEntity.ok(
+                new ApiResponseFormat<>(
+                        res,
+                        "Discount deleted successfully",
+                        true,
+                        HttpStatus.OK.value(),
+                        LocalDateTime.now()
+                )
+        );
     }
 
     @GetMapping("/findByDiscountId/{id}")
-        public ResponseEntity<List<ProductCreateResponseDto>>  getAllProductsByDiscount(@PathVariable UUID id) {
-        try {
-            var res = discountService.getProductsByDiscountId(id);
-            return ResponseEntity.ok().body(res);
-        }
-        catch (Exception e) {
-            log.error("Problem while getting the products : {}",e.toString());
-            return ResponseEntity.internalServerError().build();
-        }
+    public ResponseEntity<ApiResponseFormat<List<ProductCreateResponseDto>>> getAllProductsByDiscount(
+            @PathVariable UUID id
+    ) throws Exception {
+        List<ProductCreateResponseDto> res = discountService.getProductsByDiscountId(id);
+
+        return ResponseEntity.ok(
+                new ApiResponseFormat<>(
+                        res,
+                        "Products fetched by discountId",
+                        true,
+                        HttpStatus.OK.value(),
+                        LocalDateTime.now()
+                )
+        );
     }
 
     @GetMapping("/findByProductId/{id}")
-    public ResponseEntity<List<DiscountDto>>  getAllProductsByDiscount(@PathVariable Long id) {
-        try {
-            var res = discountService.getAllDiscountsByProductId(id);
-            return ResponseEntity.ok().body(res);
-        }
-        catch (Exception e) {
-            log.error("Problem while getting the discounts : {}",e.toString());
-            return ResponseEntity.internalServerError().build();
-        }
+    public ResponseEntity<ApiResponseFormat<List<DiscountDto>>> getAllDiscountsByProduct(
+            @PathVariable Long id
+    ) throws Exception {
+        List<DiscountDto> res = discountService.getAllDiscountsByProductId(id);
+
+        return ResponseEntity.ok(
+                new ApiResponseFormat<>(
+                        res,
+                        "Discounts fetched by productId",
+                        true,
+                        HttpStatus.OK.value(),
+                        LocalDateTime.now()
+                )
+        );
     }
 }

@@ -1,12 +1,15 @@
 package com.notification_service.notification_service.controller;
 
-import com.notification_service.notification_service.dto.UserDetailsRequestDto;
+import com.notification_service.notification_service.common.ApiResponseFormat;
 import com.notification_service.notification_service.model.UserFcmTokenDetails;
 import com.notification_service.notification_service.service.DetailsService;
-import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/notification")
@@ -16,33 +19,43 @@ import org.springframework.http.ResponseEntity;
         "https://ecommerce-web-puce-sigma.vercel.app",
         "http://34.58.229.119:5173"
 })
-
 @RequiredArgsConstructor
 @Slf4j
 public class UserController {
+
     private final DetailsService detailsService;
 
     @PostMapping("/addtoken")
-    public ResponseEntity<UserFcmTokenDetails>createToken(@RequestBody UserFcmTokenDetails dto){
-        try {
-            var res= detailsService.addToken(dto);
-            return ResponseEntity.ok(res);
-        }
-        catch (Exception e) {
-            log.error("unable to add token",e.toString());
-            return ResponseEntity.internalServerError().build();
-        }
+    public ResponseEntity<ApiResponseFormat<UserFcmTokenDetails>> createToken(
+            @RequestBody UserFcmTokenDetails dto
+    ) {
+        UserFcmTokenDetails res = detailsService.addToken(dto);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                new ApiResponseFormat<>(
+                        res,
+                        "FCM token saved successfully",
+                        true,
+                        HttpStatus.CREATED.value(),
+                        LocalDateTime.now()
+                )
+        );
     }
 
     @GetMapping("/gettoken/{userId}")
-    public ResponseEntity<UserFcmTokenDetails> getTokenDetails(@PathVariable Long userId) {
-        try {
-            var res = detailsService.getByUserId(userId);
-            return ResponseEntity.ok().body(res);
-        }
-        catch (Exception e) {
-            log.error("Problem while getting the UserTokenDetails : {}",e.toString());
-            return ResponseEntity.internalServerError().build();
-        }
+    public ResponseEntity<ApiResponseFormat<UserFcmTokenDetails>> getTokenDetails(
+            @PathVariable Long userId
+    ) {
+        UserFcmTokenDetails res = detailsService.getByUserId(userId);
+
+        return ResponseEntity.ok(
+                new ApiResponseFormat<>(
+                        res,
+                        "FCM token fetched successfully",
+                        true,
+                        HttpStatus.OK.value(),
+                        LocalDateTime.now()
+                )
+        );
     }
 }

@@ -1,8 +1,114 @@
+# Environment variables - NEVER COMMIT THESE!
+.env
+.env.local
+.env.*.local
+*.env
+
+# Kubernetes secrets
 k8s/secrets.yaml
-docker-compose.yml
-#application.yml
-# Spring Boot config files
-application.yml
-application.properties
-**/application.yml
-**/application.properties
+
+# Backup files
+*.backup
+*.bak
+README.md.backup
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Gradle
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Java
+*.class
+*.log
+*.ctxt
+.mtj.tmp/
+hs_err_pid*
+replay_pid*
+
+# Spring Boot
+spring-shell.log
+
+# Logs
+logs/
+*.log
+log/
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Database
+*.sql
+*.sqlite
+*.db
+
+# Secrets & Keys - CRITICAL!
+*.key
+*.pem
+*.crt
+*.p12
+credentials.json
+application-secrets.yml
+application-secrets.properties
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Node modules (React admin panel)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Flutter (mobile app)
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+pubspec.lock
+
+# Build outputs
+dist/
+build/
+out/
+
+# Coverage
+coverage/
+*.lcov
+
+# Test results
+test-results/
+Prabhat_Kumar_Resume.html
+Prabhat_Kumar_Resume.tex
+# Secrets
+notification_service/src/main/resources/firebase/
+*/src/main/resources/application.properties
+*/src/main/resources/application.yml

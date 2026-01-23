@@ -16,6 +16,7 @@ public class OrderMappers {
     public static OrderDto toOrderDto(Order order) {
         OrderDto res = new OrderDto();
         res.setId(order.getId());
+        res.setIsPaid(order.getPayment() == null ? false : order.getPayment().getIsPaid());
         res.setUserId(order.getUserId());
         res.setOrderAt(order.getOrderAt());
         res.setDeliveryDate(order.getDeliveryDate());
@@ -24,6 +25,7 @@ public class OrderMappers {
         res.setProductId(order.getProductId());
         res.setAddress(order.getAddress());
         res.setDiscount(order.getDiscountApplied());
+        res.setQuantity(order.getOrderQuantity());
         return res;
     }
 }

@@ -15,9 +15,24 @@ public class DetailsService {
     public UserFcmTokenDetails addToken(UserFcmTokenDetails req) {
         UserFcmTokenDetails detail = userFcmTokenDetailsRepository.findByUserId(req.getUserId())
                 .orElse(new UserFcmTokenDetails());
-        detail.setEmail(req.getEmail());
-        detail.setFcmToken(req.getFcmToken());
-        detail.setUserId(req.getUserId());
+        detail.setEmail(
+                (req.getEmail() != null && !req.getEmail().isBlank())
+                        ? req.getEmail()
+                        : null
+        );
+
+        detail.setFcmToken(
+                (req.getFcmToken() != null && !req.getFcmToken().isBlank())
+                        ? req.getFcmToken()
+                        : null
+        );
+
+        detail.setUserId(
+                (req.getUserId() != null)
+                        ? req.getUserId()
+                        : null
+        );
+
         return userFcmTokenDetailsRepository.save(detail);
     }
 

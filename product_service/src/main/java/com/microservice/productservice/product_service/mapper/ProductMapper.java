@@ -1,6 +1,5 @@
 package com.microservice.productservice.product_service.mapper;
 
-import com.microservice.productservice.product_service.dto.category.CategoryCreateResponseDto;
 import com.microservice.productservice.product_service.dto.product.ProductCreateResponseDto;
 import com.microservice.productservice.product_service.dto.product.ProductCreaterequestDto;
 import com.microservice.productservice.product_service.model.CategoryModel;
@@ -17,6 +16,16 @@ public class ProductMapper {
         product.setSizes(data.getSize());
         product.setCategory(category);
         product.setCreatedBy(data.getCreatedBy());
+
+        product.setFit(data.getFit());
+        product.setFabric(data.getFabric());
+        product.setBrandName(data.getBrandName());
+        product.setGenders(data.getGenders());
+        product.setNeckType(data.getNeckType());
+        product.setPattern(data.getPattern());
+        product.setOccasion(data.getOccasion());
+        product.setSeason(data.getSeason());
+        product.setSleeveType(data.getSleeveType());
         return product;
     }
 
@@ -27,9 +36,20 @@ public class ProductMapper {
         dto.setProductDescription(product.getProductDescription());
         dto.setProductPrice(product.getProductPrice());
         dto.setProductsImages(product.getProductsImages());
-        dto.setCategoryId(product.getId());
+        dto.setCreatedById(product.getUserId());
+        dto.setCategoryId(product.getCategory().getId());
         dto.setCategoryName(product.getCategory() != null ? product.getCategory().getCategoryName() : null);
+        dto.setSizes(product.getSizes());
 
+        dto.setFit(product.getFit());
+        dto.setFabric(product.getFabric());
+        dto.setBrandName(product.getBrandName());
+        dto.setGenders(product.getGenders());
+        dto.setNeckType(product.getNeckType());
+        dto.setPattern(product.getPattern());
+        dto.setOccasion(product.getOccasion());
+        dto.setSeason(product.getSeason());
+        dto.setSleeveType(product.getSleeveType());
         return dto;
     }
 }

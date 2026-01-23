@@ -162,7 +162,8 @@ public class Routes {
                 .build();
     }
 
-//    @Bean
+
+    //    @Bean
 //    public RouterFunction<ServerResponse> notificationServiceSwaggerRoute() {
 //        return route("notification_service_swagger")
 //                .route(method(HttpMethod.GET)

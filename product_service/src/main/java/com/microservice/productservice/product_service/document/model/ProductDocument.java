@@ -39,6 +39,9 @@ public class ProductDocument {
     private List<String> sizes = new ArrayList<>();
 
     @Field(type = FieldType.Keyword)
+    private List<String> images = new ArrayList<>();
+
+    @Field(type = FieldType.Keyword)
     private String createdBy;
 
     @Field(type = FieldType.Date, format = DateFormat.date_hour_minute_second_millis)

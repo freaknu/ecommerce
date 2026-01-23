@@ -1,7 +1,9 @@
 package com.notification_service.notification_service.service;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.notification_service.notification_service.events.OrderPlacedEvent;
 import com.notification_service.notification_service.events.OtpEvent;
+import com.notification_service.notification_service.model.Notifications;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.DltHandler;
@@ -14,6 +16,8 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.kafka.annotation.BackOff;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -21,6 +25,7 @@ public class KafkaConsumerService {
 
     private final EmailService emailService;
     private final DetailsService userDetails;
+    private final NotificationService notificationService;
 
     @RetryableTopic(
             attempts = "5",
@@ -33,7 +38,7 @@ public class KafkaConsumerService {
             "spring.json.value.default.type=com.notification_service.notification_service.events.OrderPlacedEvent"
     })
     public void listenOrderPlaced(@Payload OrderPlacedEvent event,
-                                  @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
+                                  @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) throws FirebaseMessagingException {
         log.info("Received OrderPlacedEvent from {}: userId={}, orderId={}",
                 topic, event.getUserId(), event.getOrderId());
 
@@ -43,6 +48,15 @@ public class KafkaConsumerService {
         emailService.sendEmail(email, "Order Placed Successfully!",
                 "Your order with ID " + event.getOrderId() + " has been placed.");
         log.info("Order confirmation email sent to {}", email);
+
+        Notifications notifications = new Notifications();
+        notifications.setTitle("Order Placed Successfully");
+        notifications.setReceivedAt(LocalDateTime.now());
+        notifications.setAboutPage("order_page");
+        notifications.setIconUrl("");
+        notifications.setUserId(event.getUserId());
+        notifications.setDescription("Order Placed Successfully Enjoy Our Services !");
+        notificationService.saveNotification(notifications);
     }
 
     @RetryableTopic(

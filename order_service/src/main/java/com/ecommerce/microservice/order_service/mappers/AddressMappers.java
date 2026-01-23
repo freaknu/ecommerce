@@ -23,6 +23,7 @@ public class AddressMappers {
         res.setUpdatedAt(address.getUpdatedAt());
         res.setPhoneNumber(address.getPhoneNumber());
         res.setUserId(address.getUserId());
+        res.setIsDefaultAddress(address.getIsDefaultAddress());
         return res;
     }
 

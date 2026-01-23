@@ -29,13 +29,14 @@ public class SecurityConfig {
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
 //                .cors(c->c.configurationSource(config.corsConfigurationSource()))
                 .authorizeHttpRequests(req->req.requestMatchers(
-                        "/api/auth/**","/swagger-ui/**","/v3/api-docs/**","/swagger-resources/**","/swagger-ui.html")
+                        "/api/auth/**","/swagger-ui/**","/v3/api-docs/**","/swagger-resources/**","/swagger-ui.html","/login/oauth2/**",
+                                "/oauth2/**")
                         .permitAll()
                         .anyRequest()
                         .authenticated())
-//                .oauth2Login(oauth->oauth
-//                        .loginPage("/oauth2/authorization/google")
-//                        .defaultSuccessUrl("/oauth2/success",true))
+                .oauth2Login(oauth->oauth
+                        .loginPage("/oauth2/authorization/google")
+                        .defaultSuccessUrl("/oauth2/success",true))
                 .oauth2Login(oauth->oauth.authorizationEndpoint(e->e.baseUri("/oauth2/authorization"))
                         .successHandler(oAuth2LoginSuccessHandler))
 

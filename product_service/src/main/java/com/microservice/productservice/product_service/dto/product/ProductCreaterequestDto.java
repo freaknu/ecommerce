@@ -19,5 +19,18 @@ public class ProductCreaterequestDto {
     private Long categoryId;
     private List<String> size = new ArrayList<>();
     private String createdBy;
+
+    private String fabric;        // Cotton, Denim, Linen
+    private String fit;           // Slim, Regular, Oversized
+    private String sleeveType;    // Full, Half, Sleeveless
+    private String neckType;      // Round, V-Neck, Polo
+    private String pattern;       // Solid, Printed, Checked
+    private String occasion;      // Casual, Formal, Party
+    private String season;        // Summer, Winter, All
+
+
+
+    private String brandName;
+    private List<String> genders = new ArrayList<>();
 }
 

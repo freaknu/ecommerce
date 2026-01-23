@@ -22,4 +22,7 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
     Optional<Inventory> findTopByProductId(Long productId);
 
     Optional<Inventory> findTopByCategoryId(Long categoryId);
+
+    void deleteByProductId(Long productId);
+    void deleteAllByProductId(Long productId);
 }

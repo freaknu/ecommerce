@@ -20,14 +20,7 @@ public class OpenApiConfig {
                 .info(new Info().title("Inventory Service").description("Inventory Service")
                         .version("1.0")
                         .termsOfService("This is Only for my uses and Can be Viewed by The Resume Checker")
-                        .license(new License().name("Apace Tomcat")))
-                .components(new Components().addSecuritySchemes("bearerAuth",
-                        new SecurityScheme()
-                                .type(SecurityScheme.Type.HTTP)
-                                .scheme("bearer")
-                                .bearerFormat("JWT")
-                ))
-                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"));
+                        .license(new License().name("Apace Tomcat")));
 
     }
 }

@@ -29,6 +29,7 @@ public class Address {
     private String city;
     private String state;
     private String landmark;
+    private Boolean isDefaultAddress;
 
     @Column(length = 6)
     private String pinCode;

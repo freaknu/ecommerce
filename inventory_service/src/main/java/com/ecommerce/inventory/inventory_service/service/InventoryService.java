@@ -60,7 +60,7 @@ public class InventoryService {
     }
 
     @Transactional
-    public ErrorResponse orderProduct(ProductPurchaseDto data) throws InventoryException {
+    public boolean orderProduct(ProductPurchaseDto data) throws InventoryException {
 
         Inventory inventory = inventoryRepository
                 .findByProductIdAndCategoryIdForUpdate(
@@ -81,6 +81,20 @@ public class InventoryService {
 
         inventoryRepository.save(inventory);
 
-        return new ErrorResponse(200, "Purchase successful", LocalDateTime.now());
+        return true;
+    }
+
+    @Transactional
+    public boolean deleteByProductId(Long productId) {
+         inventoryRepository.deleteByProductId(productId);
+         return true;
+    }
+
+    public boolean deleteAllByProductId(Long productId) {
+        inventoryRepository.deleteAllByProductId(productId);
+        return true;
+    }
+    public List<Inventory> getAllInventory(){
+        return inventoryRepository.findAll();
     }
 }

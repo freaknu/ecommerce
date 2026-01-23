@@ -9,7 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="product_service" />
       </profile>
-      <profile name="Annotation profile for order_service" enabled="true">
+      <profile name="Annotation profile for notification_service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -18,26 +18,18 @@
         </processorPath>
         <module name="inventory_service" />
         <module name="eurekaserver" />
-        <module name="maingateway" />
+        <module name="uploadservice" />
         <module name="order_service" />
         <module name="notification_service" />
-      </profile>
-      <profile name="Annotation profile for uploadservice" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
-        </processorPath>
-        <module name="uploadservice" />
         <module name="AuthService" />
+        <module name="maingateway" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="main_gateway" target="21" />
       <module name="producreview" target="21" />
       <module name="productreview" target="21" />
+      <module name="review_service" target="21" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
@@ -52,6 +44,7 @@
       <module name="producreview" options="-parameters" />
       <module name="product_service" options="-parameters" />
       <module name="productreview" options="-parameters" />
+      <module name="review_service" options="-parameters" />
       <module name="uploadservice" options="-parameters" />
     </option>
   </component>

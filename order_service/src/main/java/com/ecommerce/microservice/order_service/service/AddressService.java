@@ -52,7 +52,7 @@ public class AddressService {
 
     public List<AddressDto> getAllAddress(Long userId) {
         return addressRepository
-                .findByUserId(userId)
+                .findAllByUserId(userId)
                 .stream()
                 .map(AddressMappers::addressDto).toList();
     }
@@ -61,5 +61,20 @@ public class AddressService {
         return addressRepository
                 .findById(addressId)
                 .orElseThrow(()->new Exception("Address not found with address id : {}" + addressId));
+    }
+
+    public Boolean setDefaultAddress(Long userId,Long defaultAddressId ) {
+        List<Address>allAddressOfUser = addressRepository.findAllByUserId(userId);
+        List<Address>updatedAddress = allAddressOfUser
+                .stream()
+                .map((address -> {
+                    if(address.getId() == defaultAddressId) {
+                        address.setIsDefaultAddress(true);
+                    }
+                    else address.setIsDefaultAddress(false);
+                    return address;
+                })).toList();
+        addressRepository.saveAll(updatedAddress);
+        return true;
     }
 }

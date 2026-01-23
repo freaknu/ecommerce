@@ -14,7 +14,7 @@ public class InventoryClientService {
 
     @CircuitBreaker(name = "inventoryCB",fallbackMethod = "inventoryFallback")
     public InventoryClientResponse placedOrder(InventoryClientRequestDto dto) {
-        return inventoryClient.placeOrder(dto);
+        return inventoryClient.placeOrder(dto).getData();
     }
 
     public InventoryClientResponse inventoryFallback(InventoryClientRequestDto dto){

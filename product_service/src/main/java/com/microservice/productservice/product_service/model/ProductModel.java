@@ -20,6 +20,8 @@ public class ProductModel {
 
     private Long userId;
     private String productName;
+
+    @Column(length = 1000)
     private String productDescription;
     private int productPrice;
 
@@ -33,9 +35,25 @@ public class ProductModel {
     private CategoryModel category;
 
     @ElementCollection
+    @CollectionTable(name = "genders", joinColumns = @JoinColumn(name = "product_id"))
+    @Column(name = "gender")
+    private List<String> genders = new ArrayList<>();
+
+    private String brandName;
+
+    @ElementCollection
     @CollectionTable(name = "product_sizes", joinColumns = @JoinColumn(name = "product_id"))
     @Column(name = "size")
     private List<String> sizes = new ArrayList<>();
+
+    private String fabric;        // Cotton, Denim, Linen
+    private String fit;           // Slim, Regular, Oversized
+    private String sleeveType;    // Full, Half, Sleeveless
+    private String neckType;      // Round, V-Neck, Polo
+    private String pattern;       // Solid, Printed, Checked
+    private String occasion;      // Casual, Formal, Party
+    private String season;        // Summer, Winter, All
+
 
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
@@ -50,6 +68,8 @@ public class ProductModel {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    @OneToMany(mappedBy = "product")
+    private List<ReviewModel>allReviews = new ArrayList<>();
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();

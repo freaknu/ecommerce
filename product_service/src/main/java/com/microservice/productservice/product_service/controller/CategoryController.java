@@ -1,5 +1,6 @@
 package com.microservice.productservice.product_service.controller;
 
+import com.microservice.productservice.product_service.common.ApiResponseFormat;
 import com.microservice.productservice.product_service.dto.category.CategoryCreateRequestDto;
 import com.microservice.productservice.product_service.dto.category.CategoryCreateResponseDto;
 import com.microservice.productservice.product_service.service.CategoryService;
@@ -10,82 +11,118 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/product")
-@Tag(name = "Category Controller",description = "Controllers for Category")
+@Tag(name = "Category Controller", description = "Controllers for Category")
 public class CategoryController {
+
     private final CategoryService categoryService;
 
     @GetMapping("/getallCategory")
-    public ResponseEntity<List<CategoryCreateResponseDto>> getAllCategories()
-    {
-        try {
-            List<CategoryCreateResponseDto> res = categoryService.getAllCategory();
-            return new ResponseEntity<>(res, HttpStatus.OK);
-        }
-        catch (Exception ex)
-            {return ResponseEntity.badRequest().build();}
+    public ResponseEntity<ApiResponseFormat<List<CategoryCreateResponseDto>>> getAllCategories() {
+        List<CategoryCreateResponseDto> res = categoryService.getAllCategory();
+
+        return ResponseEntity.ok(
+                new ApiResponseFormat<>(
+                        res,
+                        "All categories fetched successfully",
+                        true,
+                        HttpStatus.OK.value(),
+                        LocalDateTime.now()
+                )
+        );
     }
 
     @PostMapping("/createCategory")
-    public ResponseEntity<CategoryCreateResponseDto> createCategory(@RequestBody CategoryCreateRequestDto data)
-    {
-        try {
-            log.info("the incoming user id is :{}",data.getUserId());
-            CategoryCreateResponseDto res = categoryService.createCategory(data);
-            return new ResponseEntity<>(res, HttpStatus.OK);
-        }
-        catch (Exception ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<ApiResponseFormat<CategoryCreateResponseDto>> createCategory(
+            @RequestBody CategoryCreateRequestDto data
+    ) {
+        log.info("the incoming user id is :{}", data.getUserId());
+
+        CategoryCreateResponseDto res = categoryService.createCategory(data);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                new ApiResponseFormat<>(
+                        res,
+                        "Category created successfully",
+                        true,
+                        HttpStatus.CREATED.value(),
+                        LocalDateTime.now()
+                )
+        );
     }
 
     @GetMapping("/getCategoryById/{id}")
-    public ResponseEntity<CategoryCreateResponseDto> getCategoryById(@PathVariable Long id)
-    {
-        try {
-            CategoryCreateResponseDto res = categoryService.getCategoryById(id);
-            return new ResponseEntity<>(res, HttpStatus.OK);
-        }
-        catch (Exception ex) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<ApiResponseFormat<CategoryCreateResponseDto>> getCategoryById(
+            @PathVariable Long id
+    ) {
+        CategoryCreateResponseDto res = categoryService.getCategoryById(id);
+
+        return ResponseEntity.ok(
+                new ApiResponseFormat<>(
+                        res,
+                        "Category fetched successfully",
+                        true,
+                        HttpStatus.OK.value(),
+                        LocalDateTime.now()
+                )
+        );
     }
 
     @PostMapping("/updateCategoryById/{id}")
-    public ResponseEntity<Boolean> updateCategory(@PathVariable Long id, @RequestBody CategoryCreateRequestDto data)
-    {
-        try {
-            categoryService.updateCategory(id, data);
-            return new ResponseEntity<>(true, HttpStatus.OK);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<ApiResponseFormat<Boolean>> updateCategory(
+            @PathVariable Long id,
+            @RequestBody CategoryCreateRequestDto data
+    ) {
+        categoryService.updateCategory(id, data);
+
+        return ResponseEntity.ok(
+                new ApiResponseFormat<>(
+                        true,
+                        "Category updated successfully",
+                        true,
+                        HttpStatus.OK.value(),
+                        LocalDateTime.now()
+                )
+        );
     }
 
     @DeleteMapping("/deleteCategory/{id}")
-    public ResponseEntity<Boolean> deleteCategory(@PathVariable Long id) {
-        try {
-            categoryService.deleteCategory(id);
-            return new ResponseEntity<>(true, HttpStatus.OK);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<ApiResponseFormat<Boolean>> deleteCategory(
+            @PathVariable Long id
+    ) {
+        categoryService.deleteCategory(id);
+
+        return ResponseEntity.ok(
+                new ApiResponseFormat<>(
+                        true,
+                        "Category deleted successfully",
+                        true,
+                        HttpStatus.OK.value(),
+                        LocalDateTime.now()
+                )
+        );
     }
 
     @GetMapping("/getAllCategoryByUserId/{userId}")
-    public ResponseEntity<List<CategoryCreateResponseDto>> getAllCategoryUserId(@PathVariable Long userId) {
-        try {
-            var res = categoryService.getAllCategoryUserId(userId);
-            return ResponseEntity.ok(res);
-        }
-        catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
-        }
+    public ResponseEntity<ApiResponseFormat<List<CategoryCreateResponseDto>>> getAllCategoryUserId(
+            @PathVariable Long userId
+    ) {
+        List<CategoryCreateResponseDto> res = categoryService.getAllCategoryUserId(userId);
+
+        return ResponseEntity.ok(
+                new ApiResponseFormat<>(
+                        res,
+                        "Categories fetched by userId",
+                        true,
+                        HttpStatus.OK.value(),
+                        LocalDateTime.now()
+                )
+        );
     }
 }

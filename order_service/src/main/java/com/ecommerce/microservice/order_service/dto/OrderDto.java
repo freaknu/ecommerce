@@ -22,4 +22,6 @@ public class OrderDto {
     private LocalDateTime deliveryDate;
     private Double discount;
     private OrderStatus orderStatus;
+    private Integer quantity;
+    private Boolean isPaid;
 }

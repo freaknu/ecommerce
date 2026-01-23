@@ -23,7 +23,12 @@ public class InventoryClientService {
                 categoryId,
                 quantity
         );
-        return inventoryClient.createInventory(inventoryDto);
+        return inventoryClient.createInventory(inventoryDto).getData();
+    }
+
+    @CircuitBreaker(name = "inventoryCB",fallbackMethod = "inventoryFallback")
+    public boolean deleteInventoryByProductId(Long productId) {
+        return inventoryClient.deleteInventoryByProductId(productId);
     }
 
     public InventoryResponse inventoryFallback(ProductModel product, Long categoryId, int quantity, Throwable t) {

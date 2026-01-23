@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -30,6 +29,11 @@ public class Order {
     @JoinColumn(name = "address_id")
     private Address address;
     private Double discountApplied;
+    private Integer orderQuantity;
     private LocalDateTime orderAt;
     private LocalDateTime deliveryDate;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "payment_id")
+    private Payment payment;
 }

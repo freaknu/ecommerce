@@ -12,6 +12,7 @@ import com.ecommerce.microservice.order_service.model.Address;
 import com.ecommerce.microservice.order_service.model.Order;
 import com.ecommerce.microservice.order_service.repository.AddressRepository;
 import com.ecommerce.microservice.order_service.repository.OrderRepository;
+import com.ecommerce.microservice.order_service.utils.DistanceCalculation;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,9 +30,11 @@ public class OrderService {
     private final AddressService  addressService;
     private final InventoryClientService inventoryClientService;
     private final KafkaEventService kafkaEventService;
+    private final DistanceCalculation distanceCalculation;
+
 
     @Transactional
-    public OrderDto placeOrder(InventoryClientRequestDto dto, Long addressId, Long userId,Double discount) throws Exception {
+    public OrderDto placeOrder(InventoryClientRequestDto dto, Long addressId, Long userId,Double discount,Long adminUserId) throws Exception {
 
         // Fetch address for order
         Address address = addressService.adddressByAddressId(addressId);
@@ -43,10 +46,11 @@ public class OrderService {
         InventoryClientResponse res = inventoryClientService.placedOrder(dto);
         log.info("Inventory service response: {}", res);
 
-        if (res == null || !(res.getStatus() == 200 || res.getStatus() == 201)) {
+        if (res == null || (res.getStatus() != 200 && res.getStatus() != 201)) {
             throw new Exception("Inventory rejected the order. Status: " +
                     (res != null ? res.getStatus() : "null response"));
         }
+        LocalDateTime timeForDelivery = distanceCalculation.getDeliveryDate(adminUserId,userId);
 
         Order order = new Order();
         order.setOrderAt(LocalDateTime.now());
@@ -54,8 +58,9 @@ public class OrderService {
         order.setAddress(address);
         order.setUserId(userId);
         order.setProductId(dto.getProductId());
-        order.setDeliveryDate(null);
+        order.setDeliveryDate(timeForDelivery);
         order.setDiscountApplied(discount);
+        order.setOrderQuantity(dto.getPurchaseQuantity());
 
         Order savedOrder = orderRepository.save(order);
 
@@ -67,7 +72,6 @@ public class OrderService {
 
         return OrderMappers.toOrderDto(savedOrder);
     }
-
 
 
 

@@ -22,6 +22,7 @@ public class AddressDto {
         private String landmark;
         private String pinCode;
         private String phoneNumber;
+        private Boolean isDefaultAddress = false;
         private double latitude;
         private double longitude;
         private LocalDateTime createdAt;

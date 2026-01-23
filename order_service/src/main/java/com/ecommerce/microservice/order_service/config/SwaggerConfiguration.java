@@ -20,11 +20,6 @@ public class SwaggerConfiguration {
                 .info(new Info()
                         .title("Order Service")
                         .description("Order Service for Ecommerce")
-                        .license(new License().name("Apache Tomcat")))
-                .components(new Components().addSecuritySchemes("bearerAuth",
-                        new SecurityScheme().name("Authentication").description("Bearer Auth")
-                                .type(SecurityScheme.Type.HTTP).scheme("bearer")
-                                .bearerFormat("JWT")))
-                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"));
+                        .license(new License().name("Apache Tomcat")));
     }
 }
