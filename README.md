@@ -212,7 +212,7 @@ A **complete, production-deployed e-commerce platform** showcasing enterprise-le
 | Elasticsearch | 8.15 | Search engine |
 | Apache Kafka | 7.5 | Event streaming |
 | Zookeeper | 7.5 | Kafka coordination |
-| Redis | Ready | Caching |
+| Redis | Latest | Caching & rate limiting |
 
 ### DevOps & Cloud
 | Technology | Purpose |
@@ -247,12 +247,13 @@ A **complete, production-deployed e-commerce platform** showcasing enterprise-le
 ### 2️⃣ API Gateway (8080)
 **Entry Point & Security**
 
-- JWT validation
+- JWT validation & forwarding
 - Dynamic routing
-- Circuit breaker
-- Rate limiting
+- Circuit breaker (Resilience4j)
+- **Redis-based rate limiting** (5 req/50s per user)
 - CORS handling
 - Load balancing
+- Protected endpoints throttling
 
 ### 3️⃣ Auth Service (8081)
 **Authentication & Users**
